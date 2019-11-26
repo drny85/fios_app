@@ -64,6 +64,7 @@ class Auth extends ChangeNotifier {
       if (response.statusCode == 200) {
         final userData = json.decode(response.body) as Map<String, dynamic>;
         final token = userData['token'];
+        print(token);
         final user = User.fromJson(userData['user']);
         _user = user;
         SharedPreferences prefs = await SharedPreferences.getInstance();

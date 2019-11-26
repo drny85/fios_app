@@ -1,5 +1,5 @@
 import 'package:fios/providers/auth.dart';
-import 'package:fios/utils/constant.dart';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -17,7 +17,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final user = Provider.of<Auth>(context).user;
-    final height = MediaQuery.of(context).size.height;
+
     final width = MediaQuery.of(context).size.width;
     return Scaffold(
       body: Column(
