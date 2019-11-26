@@ -26,18 +26,33 @@ class Auth extends ChangeNotifier {
   }
 
   Future<bool> autoLogin() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
+    try {
+      SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    if (!prefs.containsKey('user_data')) {
+      if (!prefs.containsKey('user_data')) {
+        return false;
+      }
+      final userData =
+          json.decode(prefs.getString('user_data')) as Map<String, Object>;
+      _token = userData['token'];
+      http.Response response =
+          await http.get('$kUrl/user/me', headers: kHeaders);
+      if (response.statusCode == 200) {
+        final decoded = json.decode(response.body);
+        final user = User.fromJson(decoded);
+        _user = user;
+      }
+      if (response.statusCode >= 400) {
+        throw response.body;
+      }
+
+      notifyListeners();
+      print('Auto Login');
+      return true;
+    } catch (e) {
+      print(e);
       return false;
     }
-    final userData =
-        json.decode(prefs.getString('user_data')) as Map<String, Object>;
-    _token = userData['token'];
-
-    notifyListeners();
-    print('Auto Login');
-    return true;
   }
 
   Future<void> login(String email, String password) async {
@@ -49,20 +64,16 @@ class Auth extends ChangeNotifier {
       if (response.statusCode == 200) {
         final userData = json.decode(response.body) as Map<String, dynamic>;
         final token = userData['token'];
-
-        final user = userData['user'];
-
-        _token = token;
-
+        final user = User.fromJson(userData['user']);
+        _user = user;
         SharedPreferences prefs = await SharedPreferences.getInstance();
-
-        prefs.setString(
-            'user_data', json.encode({'token': token, 'user': user}));
+        prefs.setString('user_data', json.encode({'token': token}));
 
         notifyListeners();
-      } else {
-        print(response.statusCode);
-        print(response.body);
+      }
+
+      if (response.statusCode >= 400) {
+        throw response.body;
       }
     } catch (e) {
       print(e);

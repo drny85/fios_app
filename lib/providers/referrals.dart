@@ -145,4 +145,44 @@ class Referrals extends ChangeNotifier {
       return false;
     }
   }
+
+  Future<bool> addReferral(Referral referral) async {
+    try {
+      final body = json.encode({
+        'name': referral.name,
+        'last_name': referral.lastName,
+        'address': referral.address,
+        'apt': referral.apt,
+        'city': referral.city,
+        'zipcode': referral.zipcode,
+        'email': referral.email,
+        'status': referral.status,
+        'manager': referral.manager,
+        'referralBy': referral.referredBy.id,
+        'moveIn': referral.moveIn.toIso8601String(),
+        'comment': referral.comment,
+        'phone': referral.phone
+      });
+
+      bool success;
+      http.Response response =
+          await http.post('$kUrl/add-referral', body: body, headers: kHeaders);
+      if (response.statusCode == 200) {
+        final res = json.decode(response.body);
+        print(res);
+
+        success = true;
+      }
+
+      if (response.statusCode >= 400) {
+        success = false;
+        throw response.body;
+      }
+
+      return success;
+    } catch (e) {
+      print(e);
+      return false;
+    }
+  }
 }

@@ -1,5 +1,6 @@
 //import 'package:fios/models/referee.dart';
 //import 'package:fios/models/user.dart';
+import 'package:fios/models/manager.dart';
 import 'package:fios/models/referee.dart';
 import 'package:flutter/foundation.dart';
 
@@ -21,7 +22,7 @@ class Referral {
   String package;
   String mon;
   Referee referredBy;
-  //Manager manager;
+  Manager manager;
   String userId;
   bool emailSent;
   //User updatedBy;
@@ -30,13 +31,13 @@ class Referral {
   DateTime collateralSentOn;
 
   Referral({
-    @required this.id,
+    this.id,
     @required this.name,
     @required this.lastName,
     @required this.address,
     this.apt,
     @required this.city,
-    @required this.zipcode,
+    this.zipcode,
     @required this.phone,
     this.email,
     this.emailSent,
@@ -45,12 +46,12 @@ class Referral {
     this.collateralSentOn,
     this.comment,
     this.dueDate,
-    // @required this.manager,
+    this.manager,
     this.mon,
     @required this.moveIn,
     this.orderDate,
     this.package,
-    //this.referredBy,
+    this.referredBy,
     @required this.status,
     this.updated,
     //this.updatedBy
@@ -84,8 +85,11 @@ class Referral {
       orderDate: json['order_date'] != null && json['order_date'] != 'undefined'
           ? DateTime.tryParse(json['order_date'])
           : null,
-      //manager: Manager.fromJson(json['manager']),
-      //referredBy: Referee.fromJson(json['referralBy']),
+      manager:
+          json['manager'] != null ? Manager.fromJson(json['manager']) : null,
+      referredBy: json['referralBy'] != null
+          ? Referee.fromJson(json['referralBy'])
+          : null,
       updated: json['update'],
       userId: json['userId'],
       //updatedBy: User.fromJson(json['updatedBy']),

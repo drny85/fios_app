@@ -6,23 +6,24 @@ class Manager {
   String lastName;
   String email;
   String phone;
+  String userId;
 
   Manager(
-      {@required this.id,
+      {this.id,
       @required this.name,
       @required this.lastName,
       this.email,
+      this.userId,
       this.phone});
 
   factory Manager.fromJson(Map<String, dynamic> json) {
-    return json['_id']
-        ? Manager(
-            id: json['_id'],
-            name: json['name'],
-            lastName: json['last_name'],
-            email: json['email'],
-            phone: json['phone'],
-          )
-        : null;
+    return Manager(
+      id: json['_id'],
+      name: json['name'],
+      lastName: json['last_name'],
+      email: json['email'],
+      phone: json['phone'],
+      userId: json['userid'],
+    );
   }
 }

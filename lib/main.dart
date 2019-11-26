@@ -1,6 +1,8 @@
 import 'package:fios/providers/auth.dart';
+import 'package:fios/providers/managers.dart';
 import 'package:fios/providers/notes.dart';
 import 'package:fios/providers/referrals.dart';
+import 'package:fios/providers/referres.dart';
 import 'package:fios/screens/home_screen.dart';
 import 'package:fios/screens/login_screen.dart';
 import 'package:fios/screens/managers/managers_screen.dart';
@@ -8,6 +10,7 @@ import 'package:fios/screens/notes/notes_screen.dart';
 
 import 'package:fios/screens/profile_screen.dart';
 import 'package:fios/screens/referees_screen.dart';
+import 'package:fios/screens/referrals/add_referral.dart';
 import 'package:fios/screens/referrals/referrals_screen.dart';
 
 import 'package:fios/screens/splah_screen.dart';
@@ -30,6 +33,12 @@ class MyApp extends StatelessWidget {
         ),
         ChangeNotifierProvider.value(
           value: Notes(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Referees(),
+        ),
+        ChangeNotifierProvider.value(
+          value: Managers(),
         ),
       ],
       child: Consumer<Auth>(
@@ -60,6 +69,7 @@ class MyApp extends StatelessWidget {
             ManagersScreen.routeName: (context) => ManagersScreen(),
             ProfileScreen.routeName: (context) => ProfileScreen(),
             NotesScreen.routeName: (context) => NotesScreen(),
+            AddReferralScreen.routeName: (context) => AddReferralScreen(),
             //EditReferralScreen.routeName: (context) => EditReferralScreen(),
           },
         ),

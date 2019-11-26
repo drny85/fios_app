@@ -1,27 +1,62 @@
 import 'package:flutter/material.dart';
 
 class Coach {
-  final String id;
-  final String name;
-  final String lastName;
-  final String email;
-  final String phone;
+  String id;
+  String name;
+  String lastName;
+  String email;
+  String phone;
+  bool profileCompleted;
+  String title;
+  String vendor;
+  Roles roles;
+  String image;
 
   Coach({
     @required this.id,
     this.name,
-    this.lastName,
     this.email,
     this.phone,
+    this.roles,
+    this.lastName,
+    this.profileCompleted,
+    this.title = '',
+    this.vendor = '',
   });
 
-  factory Coach.fromJson(Map<String, dynamic> json) {
+  factory Coach.fromJson(Map<String, Object> json) {
     return Coach(
       id: json['_id'],
       name: json['name'],
-      lastName: json['last_name'],
       email: json['email'],
       phone: json['phone'],
+      roles: Roles.fromJson(
+        json['roles'],
+      ),
+      lastName: json['last_name'],
+      vendor: json['vendor'],
+      title: json['title'],
+    );
+  }
+
+  @override
+  String toString() {
+    return super.toString();
+  }
+}
+
+class Roles {
+  bool isAdmin;
+  bool active;
+  bool coach;
+
+  Roles({this.active, this.coach, this.isAdmin});
+
+  factory Roles.fromJson(Map<String, dynamic> json) {
+    return Roles(
+      active: json['active'],
+      isAdmin: json['isAdmin'],
+      coach: json['coach'],
     );
   }
 }

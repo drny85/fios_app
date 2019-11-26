@@ -107,6 +107,13 @@ class _NotesScreenState extends State<NotesScreen> {
                 itemCount: notes.length,
                 itemBuilder: (context, int index) {
                   final note = notes[index];
+                  if (note == null)
+                    return Center(
+                      child: Text(
+                        'No notes',
+                        style: TextStyle(fontSize: 24.0),
+                      ),
+                    );
 
                   return Padding(
                     padding: const EdgeInsets.symmetric(

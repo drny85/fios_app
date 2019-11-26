@@ -6,6 +6,7 @@ class Referee {
   String lastName;
   String email;
   String phone;
+  String userId;
 
   Referee({
     this.id,
@@ -13,6 +14,7 @@ class Referee {
     this.lastName,
     this.email,
     this.phone,
+    this.userId,
   });
 
   factory Referee.fromJson(Map<String, dynamic> json) {
@@ -22,6 +24,7 @@ class Referee {
       lastName: json['last_name'],
       email: json['email'],
       phone: json['phone'],
+      userId: json['userId'] != null ? json['userId'] : null,
     );
   }
 }
