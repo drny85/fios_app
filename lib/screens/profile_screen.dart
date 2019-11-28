@@ -9,10 +9,31 @@ class ProfileScreen extends StatefulWidget {
   _ProfileScreenState createState() => _ProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _ProfileScreenState extends State<ProfileScreen>
+    with TickerProviderStateMixin {
   void _logout() async {
     await Provider.of<Auth>(context).logout();
   }
+
+  Animation<double> animation;
+  AnimationController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller =
+        AnimationController(vsync: this, duration: Duration(seconds: 1));
+    animation = Tween(begin: 0.0, end: 24.0)
+        .animate(CurvedAnimation(parent: controller, curve: Curves.easeIn));
+
+    controller.forward();
+  }
+
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   controller.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +48,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 8.0),
-            height: MediaQuery.of(context).size.height / 3,
+            height: MediaQuery.of(context).size.height * 0.4,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40.0),
                 image: DecorationImage(
@@ -47,7 +68,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ], begin: Alignment.center, end: Alignment.bottomCenter),
                   ),
                 ),
-                Positioned(
+                AnimatedPositioned(
+                  duration: controller.duration,
                   bottom: 20.0,
                   left: 20.0,
                   child: Column(

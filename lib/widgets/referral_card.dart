@@ -51,6 +51,13 @@ class ReferralCard extends StatelessWidget {
                           fontWeight: FontWeight.bold,
                           letterSpacing: 2.0),
                     ),
+                    Spacer(),
+                    referral.collateralSent
+                        ? Icon(
+                            Icons.email,
+                            color: Theme.of(context).primaryColor,
+                          )
+                        : Container(),
                   ],
                 ),
                 SizedBox(
@@ -162,8 +169,8 @@ class ReferralCard extends StatelessWidget {
                     spreadRadius: 2.0),
               ],
               color: referral.collateralSent
-                  ? Colors.grey[100]
-                  : Colors.grey[350]),
+                  ? Colors.grey[200]
+                  : Colors.grey[100]),
         ),
       ),
     );
