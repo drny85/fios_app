@@ -342,6 +342,25 @@ class _ReferralDetailState extends State<ReferralDetail> {
                     SizedBox(
                       height: 8.0,
                     ),
+                    Row(
+                      children: <Widget>[
+                        Text(
+                          'By:',
+                          style: kTextStyleDetails,
+                        ),
+                        SizedBox(
+                          width: 5.0,
+                        ),
+                        Text(
+                          '${widget.referral.referredBy.name} ${widget.referral.referredBy.lastName}'
+                              .toUpperCase(),
+                          style: kTextStyleDetails,
+                        ),
+                      ],
+                    ),
+                    SizedBox(
+                      height: 8.0,
+                    ),
                     Text(
                       'Status: ${widget.referral.status.toUpperCase()}',
                       style: kTextStyleDetails,

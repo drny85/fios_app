@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           debugShowCheckedModeBanner: false,
           theme: ThemeData(
             // This is the theme of your application.
-            primaryColor: Colors.red,
+            primaryColor: Color(0xffE74C3C),
             accentColor: Colors.white,
             fontFamily: 'Montserrat',
 

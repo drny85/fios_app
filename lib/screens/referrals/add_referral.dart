@@ -29,11 +29,12 @@ class _AddReferralScreenState extends State<AddReferralScreen> {
   String email = '';
   String city;
   String manager = '';
-  String referralBy = '5c46615c8d0a3a48a081900a';
+  String referralBy = '';
   String comment = '';
   String phone = '';
 
-  String dropdownValue = 'One';
+  String _selectedManager;
+  String _selectedReferee;
 
   DateTime _initialDate = DateTime.now();
 
@@ -93,6 +94,8 @@ class _AddReferralScreenState extends State<AddReferralScreen> {
   @override
   Widget build(BuildContext context) {
     final managers = Provider.of<Managers>(context).managers;
+    final referees = Provider.of<Referees>(context).sortedReferees;
+
     return Scaffold(
         appBar: AppBar(
           title: Text("Adding Referral"),
@@ -249,16 +252,29 @@ class _AddReferralScreenState extends State<AddReferralScreen> {
                                                         .size
                                                         .height *
                                                     0.3,
-                                                child: CupertinoDatePicker(
-                                                  initialDateTime: _initialDate,
-                                                  mode: CupertinoDatePickerMode
-                                                      .date,
-                                                  onDateTimeChanged: (newDate) {
-                                                    setState(() {
-                                                      moveIn = newDate;
-                                                      _initialDate = moveIn;
-                                                    });
-                                                  },
+                                                child: ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.only(
+                                                          topLeft:
+                                                              Radius.circular(
+                                                                  30.0),
+                                                          topRight:
+                                                              Radius.circular(
+                                                                  30.0)),
+                                                  child: CupertinoDatePicker(
+                                                    initialDateTime:
+                                                        _initialDate,
+                                                    mode:
+                                                        CupertinoDatePickerMode
+                                                            .date,
+                                                    onDateTimeChanged:
+                                                        (newDate) {
+                                                      setState(() {
+                                                        moveIn = newDate;
+                                                        _initialDate = moveIn;
+                                                      });
+                                                    },
+                                                  ),
                                                 ),
                                               ),
                                               FlatButton(
@@ -295,32 +311,91 @@ class _AddReferralScreenState extends State<AddReferralScreen> {
                           context: context,
                           builder: (context) {
                             return BottomSheetWidget(
-                                child: CupertinoPicker(
-                              itemExtent: 30,
-                              diameterRatio: 1.0,
-                              onSelectedItemChanged: (int index) {
-                                setState(() {
-                                  manager = managers[index].id;
-                                });
-                              },
-                              children: <Widget>[
-                                for (var manager in managers)
-                                  Text(
-                                    '${manager.name} ${manager.lastName}'
-                                        .toUpperCase(),
-                                    style: TextStyle(fontSize: 18.0),
-                                  )
-                              ],
+                                child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(30.0),
+                                  topLeft: Radius.circular(30.0)),
+                              child: CupertinoPicker(
+                                itemExtent: 30,
+                                diameterRatio: 1.0,
+                                backgroundColor: Theme.of(context).primaryColor,
+                                onSelectedItemChanged: (int index) {
+                                  setState(() {
+                                    manager = managers[index].id;
+                                    _selectedManager =
+                                        '${managers[index].name} ${managers[index].lastName}'
+                                            .toUpperCase();
+                                  });
+                                },
+                                children: <Widget>[
+                                  for (var manager in managers)
+                                    Text(
+                                      '${manager.name} ${manager.lastName}'
+                                          .toUpperCase(),
+                                      style: TextStyle(fontSize: 18.0),
+                                    )
+                                ],
+                              ),
                             ));
                           });
                     },
-                    child: Text('Select an AM'),
+                    child: Text(_selectedManager == null
+                        ? 'Select an AM'
+                        : _selectedManager),
+                  ),
+                ],
+              ),
+              Row(
+                children: <Widget>[
+                  Text('Account Manager:'),
+                  FlatButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return BottomSheetWidget(
+                                child: ClipRRect(
+                              borderRadius: BorderRadius.only(
+                                  topRight: Radius.circular(30.0),
+                                  topLeft: Radius.circular(30.0)),
+                              child: CupertinoPicker(
+                                itemExtent: 30,
+                                diameterRatio: 1.0,
+                                backgroundColor: Theme.of(context).primaryColor,
+                                onSelectedItemChanged: (int index) {
+                                  setState(() {
+                                    referralBy = referees[index].id;
+                                    _selectedReferee =
+                                        '${referees[index].name} ${referees[index].lastName}'
+                                            .toUpperCase();
+                                  });
+                                },
+                                children: <Widget>[
+                                  for (var referee in referees)
+                                    Text(
+                                      '${referee.name} ${referee.lastName}'
+                                          .toUpperCase(),
+                                      style: TextStyle(fontSize: 18.0),
+                                    )
+                                ],
+                              ),
+                            ));
+                          });
+                    },
+                    child: Text(_selectedReferee == null
+                        ? 'Select an Referee'
+                        : _selectedReferee),
                   ),
                 ],
               ),
               Container(
                 child: RaisedButton(
-                  child: Text('Save'),
+                  child: Text(
+                    'Save',
+                    style:
+                        TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                  ),
+                  color: Theme.of(context).primaryColor,
                   onPressed: _saveReferral,
                 ),
               ),

@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../providers/managers.dart';
+import '../../providers/referres.dart';
 
 class ReferralsScreen extends StatefulWidget {
   static final routeName = 'referrals_screen';
@@ -36,12 +37,13 @@ class _ReferralsScreenState extends State<ReferralsScreen> {
     await Provider.of<Referrals>(context, listen: false).getReferrals();
   }
 
-  Future<void> _getReferrals() async {
+  Future<void> _getAllDatas() async {
     setState(() {
       loading = true;
     });
     await Provider.of<Referrals>(context, listen: false).getReferrals();
     await Provider.of<Managers>(context, listen: false).getManagers();
+    await Provider.of<Referees>(context, listen: false).getReferees();
     setState(() {
       loading = false;
     });
@@ -50,7 +52,7 @@ class _ReferralsScreenState extends State<ReferralsScreen> {
   @override
   void initState() {
     super.initState();
-    _getReferrals();
+    _getAllDatas();
   }
 
   @override

@@ -11,6 +11,11 @@ class Referees extends ChangeNotifier {
 
   UnmodifiableListView<Referee> get referees => UnmodifiableListView(_referees);
 
+  List<Referee> get sortedReferees {
+    return _referees
+      ..sort((a, b) => a.name.toLowerCase().compareTo(b.name.toLowerCase()));
+  }
+
   Future<void> getReferees() async {
     try {
       http.Response response =
