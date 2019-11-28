@@ -8,6 +8,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class Auth extends ChangeNotifier {
   String _token = '';
   User _user;
+  String msg;
 
   String get token {
     return _token;
@@ -57,6 +58,7 @@ class Auth extends ChangeNotifier {
 
   Future<void> login(String email, String password) async {
     try {
+      msg = null;
       final body = json.encode({'email': email, 'password': password});
       print(body);
       http.Response response =
@@ -65,6 +67,7 @@ class Auth extends ChangeNotifier {
         final userData = json.decode(response.body) as Map<String, dynamic>;
         final token = userData['token'];
         print(token);
+
         final user = User.fromJson(userData['user']);
         _user = user;
         SharedPreferences prefs = await SharedPreferences.getInstance();

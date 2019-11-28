@@ -27,11 +27,11 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
           Container(
             margin: const EdgeInsets.symmetric(horizontal: 8.0),
-            height: width,
+            height: MediaQuery.of(context).size.height / 3,
             decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(40.0),
                 image: DecorationImage(
-                    image: NetworkImage(user.image), fit: BoxFit.cover)),
+                    image: NetworkImage(user.image), fit: BoxFit.fill)),
             child: Stack(
               children: <Widget>[
                 Container(

@@ -6,6 +6,8 @@ import 'package:fios/widgets/referrals_cart_list.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../providers/managers.dart';
+
 class ReferralsScreen extends StatefulWidget {
   static final routeName = 'referrals_screen';
   @override
@@ -39,6 +41,7 @@ class _ReferralsScreenState extends State<ReferralsScreen> {
       loading = true;
     });
     await Provider.of<Referrals>(context, listen: false).getReferrals();
+    await Provider.of<Managers>(context, listen: false).getManagers();
     setState(() {
       loading = false;
     });

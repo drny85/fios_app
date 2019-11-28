@@ -4,10 +4,13 @@ import 'package:fios/providers/managers.dart';
 import 'package:fios/providers/referrals.dart';
 import 'package:fios/providers/referres.dart';
 import 'package:fios/screens/home_screen.dart';
+import 'package:fios/widgets/bottomSheet.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
+
+import '../../models/manager.dart';
 
 class AddReferralScreen extends StatefulWidget {
   static final routeName = 'add_referral';
@@ -25,13 +28,14 @@ class _AddReferralScreenState extends State<AddReferralScreen> {
   String status = 'new';
   String email = '';
   String city;
-  String manager = '5d0ced078c0cf7001706a5a9';
+  String manager = '';
   String referralBy = '5c46615c8d0a3a48a081900a';
   String comment = '';
   String phone = '';
 
+  String dropdownValue = 'One';
+
   DateTime _initialDate = DateTime.now();
-  bool _showDate = false;
 
   final _formKey = GlobalKey<FormState>();
 
@@ -71,21 +75,24 @@ class _AddReferralScreenState extends State<AddReferralScreen> {
   @override
   void initState() {
     super.initState();
+    Future.delayed(Duration.zero).then((onValue) {
+      _getReferees();
+    });
   }
 
   Future<void> _getReferees() async {
     await Provider.of<Referees>(context, listen: false).getReferees();
-    await Provider.of<Managers>(context, listen: false).getManagers();
   }
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-    _getReferees();
+    //_getReferees();
   }
 
   @override
   Widget build(BuildContext context) {
+    final managers = Provider.of<Managers>(context).managers;
     return Scaffold(
         appBar: AppBar(
           title: Text("Adding Referral"),
@@ -221,48 +228,55 @@ class _AddReferralScreenState extends State<AddReferralScreen> {
                           children: <Widget>[
                             Text('Moving Date: '),
                             FlatButton(
-                              child: Text(moveIn == null
-                                  ? 'Pick a date'
-                                  : DateFormat.yMMMEd().format(moveIn)),
-                              onPressed: () {
-                                print('pressed');
-                                setState(() {
-                                  _showDate = true;
-                                });
-                              },
-                            ),
-                            Spacer(),
-                            _showDate
-                                ? RaisedButton(
-                                    child: Text('Confirm'),
-                                    onPressed: () {
-                                      setState(() {
-                                        _showDate = false;
+                                child: Text(moveIn == null
+                                    ? 'Pick a date'
+                                    : DateFormat.yMMMEd().format(moveIn)),
+                                onPressed: () {
+                                  print('pressed');
+
+                                  showModalBottomSheet(
+                                      context: context,
+                                      builder: (context) {
+                                        return BottomSheetWidget(
+                                          child: Column(
+                                            children: <Widget>[
+                                              SizedBox(
+                                                height: 10.0,
+                                              ),
+                                              Text('Select a Moving Date'),
+                                              SizedBox(
+                                                height: MediaQuery.of(context)
+                                                        .size
+                                                        .height *
+                                                    0.3,
+                                                child: CupertinoDatePicker(
+                                                  initialDateTime: _initialDate,
+                                                  mode: CupertinoDatePickerMode
+                                                      .date,
+                                                  onDateTimeChanged: (newDate) {
+                                                    setState(() {
+                                                      moveIn = newDate;
+                                                      _initialDate = moveIn;
+                                                    });
+                                                  },
+                                                ),
+                                              ),
+                                              FlatButton(
+                                                child: Text(
+                                                  'OK',
+                                                  style:
+                                                      TextStyle(fontSize: 20.0),
+                                                ),
+                                                onPressed: () {
+                                                  Navigator.of(context).pop();
+                                                },
+                                              ),
+                                            ],
+                                          ),
+                                        );
                                       });
-                                    },
-                                  )
-                                : Container(),
+                                }),
                           ],
-                        ),
-                        AnimatedContainer(
-                          duration: Duration(seconds: 1),
-                          curve: Curves.easeInOut,
-                          height: _showDate ? 150 : 40,
-                          child: _showDate
-                              ? SizedBox(
-                                  height: 130,
-                                  child: CupertinoDatePicker(
-                                    initialDateTime: _initialDate,
-                                    minimumYear: 1,
-                                    onDateTimeChanged: (newDate) {
-                                      setState(() {
-                                        moveIn = newDate;
-                                      });
-                                    },
-                                    mode: CupertinoDatePickerMode.date,
-                                  ),
-                                )
-                              : Container(),
                         ),
                       ],
                     ),
@@ -270,7 +284,39 @@ class _AddReferralScreenState extends State<AddReferralScreen> {
                 ),
               ),
               SizedBox(
-                height: 15.0,
+                height: 10.0,
+              ),
+              Row(
+                children: <Widget>[
+                  Text('Account Manager:'),
+                  FlatButton(
+                    onPressed: () {
+                      showModalBottomSheet(
+                          context: context,
+                          builder: (context) {
+                            return BottomSheetWidget(
+                                child: CupertinoPicker(
+                              itemExtent: 30,
+                              diameterRatio: 1.0,
+                              onSelectedItemChanged: (int index) {
+                                setState(() {
+                                  manager = managers[index].id;
+                                });
+                              },
+                              children: <Widget>[
+                                for (var manager in managers)
+                                  Text(
+                                    '${manager.name} ${manager.lastName}'
+                                        .toUpperCase(),
+                                    style: TextStyle(fontSize: 18.0),
+                                  )
+                              ],
+                            ));
+                          });
+                    },
+                    child: Text('Select an AM'),
+                  ),
+                ],
               ),
               Container(
                 child: RaisedButton(

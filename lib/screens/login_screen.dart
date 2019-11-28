@@ -12,7 +12,7 @@ class _LoginScreenState extends State<LoginScreen> {
   String _password = '';
 
   Future<void> _login() async {
-    await Provider.of<Auth>(context)
+    await Provider.of<Auth>(context, listen: false)
         .login(_email.trim().toLowerCase(), _password.trim());
   }
 
@@ -33,7 +33,10 @@ class _LoginScreenState extends State<LoginScreen> {
                   children: <Widget>[
                     Text(
                       'LOGIN',
-                      style: TextStyle(fontSize: 24.0, letterSpacing: 2.0),
+                      style: TextStyle(
+                          fontSize: 24.0,
+                          letterSpacing: 2.0,
+                          fontWeight: FontWeight.bold),
                     ),
                   ],
                 ),
@@ -41,7 +44,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
             Expanded(
               child: Container(
-                height: 500,
+                height: 600,
                 width: width,
                 decoration: BoxDecoration(
                   color: Theme.of(context).accentColor,
@@ -51,7 +54,7 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: <Widget>[
@@ -83,7 +86,10 @@ class _LoginScreenState extends State<LoginScreen> {
                             hintText: 'Password', prefixIcon: Icon(Icons.lock)),
                       ),
                       SizedBox(
-                        height: 40,
+                        height: 30,
+                      ),
+                      SizedBox(
+                        height: 5.0,
                       ),
                       FlatButton(
                           color: Theme.of(context).primaryColor,
