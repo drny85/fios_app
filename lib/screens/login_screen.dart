@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:fios/providers/auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'dart:convert';
 
 class LoginScreen extends StatefulWidget {
   @override
@@ -12,8 +16,57 @@ class _LoginScreenState extends State<LoginScreen> {
   String _password = '';
 
   Future<void> _login() async {
-    await Provider.of<Auth>(context, listen: false)
-        .login(_email.trim().toLowerCase(), _password.trim());
+    try {
+      await Provider.of<Auth>(context, listen: false)
+          .login(_email.trim().toLowerCase(), _password.trim());
+    } catch (e) {
+      final error = json.decode(e) as Map<String, dynamic>;
+
+      final message = error['msg'];
+      _showErrorMessage(msg: message);
+    }
+  }
+
+  void _showErrorMessage({String msg}) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return Platform.isIOS
+              ? CupertinoAlertDialog(
+                  title: Text('Error'),
+                  content: Padding(
+                    padding: const EdgeInsets.all(12.0),
+                    child: Text(msg),
+                  ),
+                  actions: <Widget>[
+                    CupertinoButton(
+                      child: Text(
+                        'OK',
+                        style: TextStyle(fontSize: 16.0),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                )
+              : AlertDialog(
+                  title: Text('Error'),
+                  content: Text(msg),
+                  elevation: 10.0,
+                  actions: <Widget>[
+                    FlatButton(
+                      child: Text(
+                        'OK',
+                        style: TextStyle(color: Colors.red),
+                      ),
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                    )
+                  ],
+                );
+        });
   }
 
   @override

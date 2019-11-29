@@ -60,7 +60,7 @@ class Auth extends ChangeNotifier {
     try {
       msg = null;
       final body = json.encode({'email': email, 'password': password});
-      print(body);
+
       http.Response response =
           await http.post('$kUrl/user/login', body: body, headers: kHeaders);
       if (response.statusCode == 200) {
@@ -80,7 +80,7 @@ class Auth extends ChangeNotifier {
         throw response.body;
       }
     } catch (e) {
-      print(e);
+      throw e;
     }
   }
 

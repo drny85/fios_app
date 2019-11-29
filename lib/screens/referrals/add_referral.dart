@@ -10,8 +10,6 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
-import '../../models/manager.dart';
-
 class AddReferralScreen extends StatefulWidget {
   static final routeName = 'add_referral';
   @override
